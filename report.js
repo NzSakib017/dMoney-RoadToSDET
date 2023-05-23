@@ -6,7 +6,7 @@ newman.run({
     collection: 'https://api.postman.com/collections/27409342-958620c8-62b7-4a06-8baf-94000d69d09e?access_key=PMAT-01H128BPQQC7VNR6ADQ64S6C65',
     
     //environment:require('./collection/env.json'),
-    collection: require('./Collection/dMoney-RoadToSDET-Environment.json'),
+    //collection: require('./Collection/dMoney-RoadToSDET-Environment.json'),
     
     reporters: 'htmlextra',
     iterationCount: 1,

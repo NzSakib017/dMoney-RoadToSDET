@@ -3,14 +3,14 @@
 ## Project Summary:
 This project is automation export of user API from postman using newman
 
-## Technology used:
+## Technology Used:
 - Postman
 - Newman
 
-## Pre requisites:
+## Prerequisites:
 - NodeJS
 
-## How to run:
+## How To Run:
 - ``` git clone ```
 - ``` npm i ```
 - ``` npm test ```
@@ -20,7 +20,7 @@ A report will be generate in your project source root
 ## Testcase:
 <link>
 
-## Bug report
+## Bug Report
 <link>
 
 ## API Documentation:
