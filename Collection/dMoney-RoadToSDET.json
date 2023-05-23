@@ -1,0 +1,728 @@
+{
+	"info": {
+		"_postman_id": "958620c8-62b7-4a06-8baf-94000d69d09e",
+		"name": "dMoney RoadToSDET",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27409342"
+	},
+	"item": [
+		{
+			"name": "User Login",
+			"item": [
+				{
+					"name": "User Login - Correct Creds",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.collectionVariables.set(\"SavedToken\",jsonData.token)\r",
+									"pm.environment.set(\"SavedToken\",jsonData.token)\r",
+									"\r",
+									"//pm.collectionVariables.set(\"Token\",jsonData.token)\r",
+									"\r",
+									"pm.test(\"Successful Login Check\", ()=>{\r",
+									"var jsonData2 = pm.response.json();\r",
+									"var AcquiredMessage = jsonData2.message;\r",
+									"console.log(AcquiredMessage);\r",
+									"\r",
+									"pm.expect(AcquiredMessage).contain(\"Login successfully\")\r",
+									"})\r",
+									"\r",
+									"\r",
+									"// pm.test(\"Successful Login Check 2\", function () {\r",
+									"//     var jsonData = pm.response.json();\r",
+									"//     pm.expect(jsonData.message).to.eql(\"Login successfully\");\r",
+									"// });\r",
+									"\r",
+									"\r",
+									"// pm.test(\"Body matches string\", function () {\r",
+									"//     pm.expect(pm.response.message).to.include(\"Login usuccessfully\");\r",
+									"// });\r",
+									"\r",
+									"\r",
+									"pm.test(\"Authenticated User\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Role Showing\", ()=>{\r",
+									"var jsonData = pm.response.json();\r",
+									"//var AcquiredMessage = jsonData.role;\r",
+									"//console.log(AcquiredMessage);\r",
+									"//console.log(jsonData);\r",
+									"\r",
+									"pm.expect(jsonData.role).not.equal(null)\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{SavedToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"salman@roadtocareer.net\",\r\n    \"password\":\"1234\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseURL}}/user/login",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Login - Incorrect Creds",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"// var SavedTokenWrongCred = pm.variables.get(\"SavedToken\");\r",
+									"// console.log(SavedTokenWrongCred);\r",
+									"\r",
+									"pm.collectionVariables.set(\"SavedTokenWrongCred\",jsonData.token)\r",
+									"pm.environment.set(\"SavedTokenWrongCred\",jsonData.token)\r",
+									"\r",
+									"pm.test(\"Failed Login Check\", ()=>{\r",
+									"var jsonData2 = pm.response.json();\r",
+									"var AcquiredMessage = jsonData2.message;\r",
+									"console.log(AcquiredMessage);\r",
+									"\r",
+									"pm.expect(AcquiredMessage).contain(\"Password incorrect\")\r",
+									"})\r",
+									"\r",
+									"\r",
+									"pm.test(\"Unauthenticated User\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{SavedTokenWrongCred}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"salman@roadtocareer.net\",\r\n    \"password\":\"12345\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseURL}}/user/login",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Search",
+			"item": [
+				{
+					"name": "User List Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"User Data Showing\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.users[0].id).equal(1233);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"User Data Showing - With Null\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.users[0].id).not.equal(null);\r",
+									"});\r",
+									"\r",
+									"// var jsonData = pm.response.json();\r",
+									"// console.log(jsonData.users.length)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{SavedToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BaseURL}}/user/list",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"user",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User List Search - Equal Vs Contain Testing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"User Data Showing - Equal_Integer\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.users[0].id).equal(1233);\r",
+									"    // pm.expect(jsonData.users[0].password).equal(\"1234\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"User Data Showing - Equal_Integer_partial\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.users[0].id).equal(123);\r",
+									"    // pm.expect(jsonData.users[0].password).equal(\"1234\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"User Data Showing - Equal_String\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    // pm.expect(jsonData.users[0].id).equal(1233);\r",
+									"    pm.expect(jsonData.users[0].password).equal(\"1234\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"User Data Showing - Equal_String_partial\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    // pm.expect(jsonData.users[0].id).equal(1233);\r",
+									"    pm.expect(jsonData.users[0].password).equal(\"234\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"User Data Showing - Contain_Integer\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.users[0].id).contain(1233);\r",
+									"    // pm.expect(jsonData.users[0].password).contain(\"1234\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"User Data Showing - Contain_String\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    // pm.expect(jsonData.users[0].id).contain(1233);\r",
+									"    pm.expect(jsonData.users[0].password).contain(\"1234\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"User Data Showing - Contain_String_partial\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    // pm.expect(jsonData.users[0].id).contain(1233);\r",
+									"    pm.expect(jsonData.users[0].password).contain(\"234\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{SavedToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BaseURL}}/user/list",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"user",
+								"list"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Creation",
+			"item": [
+				{
+					"name": "New User Creation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check User Creation\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.collectionVariables.set(\"UserID\", jsonData.user.id);\r",
+									"    pm.environment.set(\"UserID\", jsonData.user.id);\r",
+									"    pm.expect(jsonData.message).contains(\"User created\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var PhoneNumberPrefix = \"01711\";\r",
+									"var NIDPrefix = \"1930195\"\r",
+									"var NumberSuffix = _.random(00000,999999);\r",
+									"var RandPhoneNumber = PhoneNumberPrefix+NumberSuffix;\r",
+									"var RandNID = NIDPrefix+NumberSuffix;\r",
+									"\r",
+									"pm.collectionVariables.set(\"RandomPhoneNumber\",RandPhoneNumber)\r",
+									"pm.environment.set(\"RandomPhoneNumber\",RandPhoneNumber)\r",
+									"\r",
+									"pm.collectionVariables.set(\"RandomNID\",RandNID)\r",
+									"pm.environment.set(\"RandomNID\",RandNID)\r",
+									"\r",
+									"console.log(RandPhoneNumber);\r",
+									"console.log(RandNID)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{SavedToken}}",
+								"type": "text"
+							},
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"{{$randomFullName}}\",\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"password\":\"1234\",\r\n    \"phone_number\":\"{{RandomPhoneNumber}}\",\r\n    \"nid\":\"{{RandomNID}}\",\r\n    \"role\":\"Customer\" \r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseURL}}/user/create",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"user",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Duplicate User Testing",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check Duplicate User Creation\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.message).contains(\"already exist\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 208\", function () {\r",
+									"    pm.response.to.have.status(208);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{SavedToken}}",
+								"type": "text"
+							},
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 11845,\r\n    \"name\": \"Ms. Sophia King\",\r\n    \"email\": \"Mallie.Kemmer27@gmail.com\",\r\n    \"password\": \"1234\",\r\n    \"phone_number\": \"01711403584\",\r\n    \"nid\": \"1930195403584\",\r\n    \"role\": \"Customer\" \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseURL}}/user/create",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"user",
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Update",
+			"item": [
+				{
+					"name": "Update User By PUT (Bulk)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// pm.test(\"Check User Creation\", function () {\r",
+									"//     var jsonData = pm.response.json();\r",
+									"//     pm.collectionVariables.set(\"UserID\", jsonData.user.id);\r",
+									"//     pm.expect(jsonData.message).contains(\"User created\");\r",
+									"// });\r",
+									"\r",
+									"// pm.test(\"Status code is 201\", function () {\r",
+									"//     pm.response.to.have.status(201);\r",
+									"// });"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var PhoneNumberPrefix = \"01911\";\r",
+									"var NIDPrefix = \"1930195\"\r",
+									"var NumberSuffix = _.random(00000,999999);\r",
+									"var RandPhoneNumber = PhoneNumberPrefix+NumberSuffix;\r",
+									"var RandNID = NIDPrefix+NumberSuffix;\r",
+									" \r",
+									"pm.collectionVariables.set(\"RandomPhoneNumber\",RandPhoneNumber)\r",
+									"pm.environment.set(\"RandomPhoneNumber\",RandPhoneNumber)\r",
+									"\r",
+									"pm.collectionVariables.set(\"RandomNID\",RandNID)\r",
+									"pm.environment.set(\"RandomNID\",RandNID)\r",
+									" \r",
+									"console.log(RandPhoneNumber);\r",
+									"console.log(RandNID)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{SavedToken}}",
+								"type": "text"
+							},
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{$randomFullName}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"1234\",\r\n    \"phone_number\": \"{{RandomPhoneNumber}}\",\r\n    \"nid\": \"123456789\",\r\n    \"role\": \"Customer\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseURL}}/user/update/{{UserID}}",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"user",
+								"update",
+								"{{UserID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User By PATCH (Specific)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// pm.test(\"Check User Creation\", function () {\r",
+									"//     var jsonData = pm.response.json();\r",
+									"//     pm.collectionVariables.set(\"UserID\", jsonData.user.id);\r",
+									"//     pm.expect(jsonData.message).contains(\"User created\");\r",
+									"// });\r",
+									"\r",
+									"// pm.test(\"Status code is 201\", function () {\r",
+									"//     pm.response.to.have.status(201);\r",
+									"// });"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// var PhoneNumberPrefix = \"01911\";\r",
+									"// var NIDPrefix = \"1930195\"\r",
+									"// var NumberSuffix = _.random(00000,999999);\r",
+									"// var RandPhoneNumber = PhoneNumberPrefix+NumberSuffix;\r",
+									"// var RandNID = NIDPrefix+NumberSuffix;\r",
+									" \r",
+									"// pm.collectionVariables.set(\"RandomPhoneNumber\",RandPhoneNumber);\r",
+									"// pm.collectionVariables.set(\"RandomNID\",RandNID);\r",
+									" \r",
+									"// console.log(RandPhoneNumber);\r",
+									"// console.log(RandNID)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{SavedToken}}",
+								"type": "text"
+							},
+							{
+								"key": "X-AUTH-SECRET-KEY",
+								"value": "ROADTOSDET",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n    \"name\": \"{{$randomFullName}}\",\r\n    \"email\": \"{{$randomEmail}}\"\r\n    // \"password\": \"1234\",\r\n    // \"phone_number\": \"{{RandomPhoneNumber}}\",\r\n    // \"nid\": \"123456789\",\r\n    // \"role\": \"Customer\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseURL}}/user/update/{{UserID}}",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"user",
+								"update",
+								"{{UserID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Search Specific User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Newly Created User Should Be Found\", function () {\r",
+							"    pm.expect(pm.response.json().message).contain(\"User found\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{SavedToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BaseURL}}/user/search/id/{{UserID}}",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"user",
+						"search",
+						"id",
+						"{{UserID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Data Deletion\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.message).contains(\"deleted\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{SavedToken}}",
+						"type": "text"
+					},
+					{
+						"key": "X-AUTH-SECRET-KEY",
+						"value": "ROADTOSDET",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BaseURL}}/user/delete/{{UserID}}",
+					"host": [
+						"{{BaseURL}}"
+					],
+					"path": [
+						"user",
+						"delete",
+						"{{UserID}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "SavedToken",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNhbG1hbkByb2FkdG9jYXJlZXIubmV0IiwicGFzc3dvcmQiOiIxMjM0IiwiaWF0IjoxNjg0Njg5MDE4LCJleHAiOjE2ODQ2OTA4MTh9.NZk42ifBeuMlepvUkTf0xyWokT_YpTlZOMf7pShPruw"
+		},
+		{
+			"key": "RandomPhoneNumber",
+			"value": "01911847085"
+		},
+		{
+			"key": "RandomNID",
+			"value": "1930195847085"
+		},
+		{
+			"key": "BaseURL",
+			"value": "http://dmoney.roadtocareer.net"
+		},
+		{
+			"key": "UserID",
+			"value": 11957
+		},
+		{
+			"key": "SavedTokenWrongCred",
+			"value": null
+		}
+	]
+}
